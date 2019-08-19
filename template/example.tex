@@ -1,0 +1,132 @@
+﻿%
+% 导言
+%
+\documentclass[12pt]{book}
+
+%设置页面的宽高
+\usepackage{geometry}
+\geometry{papersize={210mm,148mm}}
+
+%引入xeCJK和垂直字体
+\usepackage[BoldFont,SlantFont,CJKchecksingle]{xeCJK}
+\newCJKfontfamily\zhsong[RawFeature={vertical:+vert:+vhal}]{SimSun}
+\newCJKfontfamily\zhhei[RawFeature={vertical:+vert:+vhal}]{SimHei}
+\newCJKfontfamily\zhkai[RawFeature={vertical:+vert:+vhal}]{KaiTi}
+
+%引入割注
+\usepackage{../packages/gezhu}
+\setgezhulines{2}
+\everygezhu{\fontsize{6}{7}\selectfont}
+\setgezhuraise{-3pt}
+
+%页面旋转90度
+\makeatletter
+\usepackage{atbegshi}
+\AtBeginShipout{
+  \global\setbox\AtBeginShipoutBox\vbox{
+    \special{pdf: put @thispage <</Rotate 90>>}
+    \box\AtBeginShipoutBox
+  }
+}
+
+%引入中文数字
+\usepackage{zhnumber}
+
+%标题格式
+\usepackage{titlesec}
+\titleformat{\part}{\Huge\bfseries\selectfont \zhkai}
+{}{0pt}{}
+\titleformat{\chapter}{\LARGE\bfseries\selectfont \zhhei}
+{第\,\zhdigits{\thechapter}\,章}{0pt}{}
+\titleformat{\section}{\Large\bfseries\selectfont \zhhei}
+{}{0pt}{}
+
+%目录格式
+\usepackage{titletoc}
+\titlecontents{part}[0pt]{\Huge\bfseries\filright\selectfont \zhkai}
+{~}{}
+{\titlerule*[1pc]{.}\zhsong\contentspage}
+\titlecontents{chapter}[10pt]{\LARGE\bfseries\filright\selectfont \zhhei}
+{\zhnumsetup{style={Traditional,Normal}}
+\contentspush{第\,\zhdigits{\thecontentslabel}\,章\ }
+}{}
+{\titlerule*[1pc]{.}\zhsong\contentspage}
+\titlecontents{section}[20pt]{\Large\bfseries\filright\selectfont \zhhei}
+{~}{}
+{\titlerule*[1pc]{.}\zhsong\contentspage}
+
+\renewcommand\contentsname{目录}
+
+%引入页眉页脚
+\usepackage{fancyhdr}
+
+%
+% 文档
+%
+\begin{document}
+\makeatletter
+\gezhu@makespecials
+
+\parskip=15pt
+
+%标题页
+\thispagestyle{empty}
+\begin{titlepage}
+\centering
+\vspace*{\stretch{3}}
+{\Huge\bfseries 标题}\\
+\vspace{\stretch{3}}
+{\large 作者}\\
+\vspace{\stretch{2}}
+\date{}
+\end{titlepage}
+\newpage
+
+%双面版式的页眉页脚
+\fancypagestyle{plain}{ %每章节第一页的格式单独设置
+\fancyhf{}
+\fancyfoot[RO,RE]{\thepage}
+}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[RO,RE]{\thepage}
+
+%目录页
+\zhnumsetup{style={Traditional,Financial}}
+\pagenumbering{zhdig}
+\tableofcontents
+\newpage
+
+%正文
+\zhnumsetup{style={Traditional,Normal}}
+\pagenumbering{zhdig}
+
+%篇
+\part*{總論}
+
+%章
+\chapter*{导语}
+\addcontentsline{toc}{chapter}{导语}
+
+这是导语。
+
+%篇
+\part*{上篇}
+
+%章
+\chapter{~}
+
+%节
+\section{比较}
+
+%进入割注环境
+\begin{withgezhu}
+
+%切换字体
+\zhsong
+
+%文字
+这是割注\gezhu{在正文中插入的『双行』或多行注解}排版测试|{本测试仅供参考}文字。
+
+\end{withgezhu}
+\end{document}

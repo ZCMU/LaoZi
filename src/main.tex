@@ -1,0 +1,113 @@
+﻿%
+% 导言
+%
+\documentclass[12pt]{book}
+
+%设置页面的宽高
+\usepackage{geometry}
+\geometry{papersize={210mm,148mm}}
+
+%引入xeCJK和垂直字体
+\usepackage[BoldFont,SlantFont,CJKchecksingle]{xeCJK}
+\newCJKfontfamily\zhsong[RawFeature={vertical:+vert:+vhal}]{SimSun}
+\newCJKfontfamily\zhhei[RawFeature={vertical:+vert:+vhal}]{SimHei}
+\newCJKfontfamily\zhkai[RawFeature={vertical:+vert:+vhal}]{KaiTi}
+
+%引入割注
+\usepackage{../packages/gezhu}
+\setgezhulines{2}
+\everygezhu{\fontsize{6}{7}\selectfont}
+\setgezhuraise{-3pt}
+
+%页面旋转90度
+\makeatletter
+\usepackage{atbegshi}
+\AtBeginShipout{
+  \global\setbox\AtBeginShipoutBox\vbox{
+    \special{pdf: put @thispage <</Rotate 90>>}
+    \box\AtBeginShipoutBox
+  }
+}
+
+%引入中文数字
+\usepackage{zhnumber}
+
+%标题格式
+\usepackage{titlesec}
+\titleformat{\part}{\Huge\bfseries\selectfont \zhkai}
+{}{0pt}{}
+\titleformat{\chapter}{\LARGE\bfseries\selectfont \zhhei}
+{第\,\zhdigits{\thechapter}\,章}{0pt}{}
+\titleformat{\section}{\Large\bfseries\selectfont \zhhei}
+{}{0pt}{}
+
+%目录格式
+\usepackage{titletoc}
+\titlecontents{part}[0pt]{\Huge\bfseries\filright\selectfont \zhkai}
+{~}{}
+{\titlerule*[1pc]{.}\zhsong\contentspage}
+\titlecontents{chapter}[10pt]{\LARGE\bfseries\filright\selectfont \zhhei}
+{\zhnumsetup{style={Traditional,Normal}}
+\contentspush{第\,\zhdigits{\thecontentslabel}\,章\ }
+}{}
+{\titlerule*[1pc]{.}\zhsong\contentspage}
+\titlecontents{section}[20pt]{\Large\bfseries\filright\selectfont \zhhei}
+{~}{}
+{\titlerule*[1pc]{.}\zhsong\contentspage}
+
+\renewcommand\contentsname{目录}
+
+%引入页眉页脚
+\usepackage{fancyhdr}
+
+%
+% 文档
+%
+\begin{document}
+\makeatletter
+\gezhu@makespecials
+
+\parskip=15pt
+
+%标题页
+\thispagestyle{empty}
+\begin{titlepage}
+\centering
+\vspace*{\stretch{3}}
+{\Huge\bfseries 老子比對}\\
+\vspace{\stretch{3}}
+{\large 袁昕~編}\\
+\vspace{\stretch{2}}
+\date{}
+\end{titlepage}
+\newpage
+
+%双面版式的页眉页脚
+\fancypagestyle{plain}{ %每章节第一页的格式单独设置
+\fancyhf{}
+\fancyfoot[RO,RE]{\thepage}
+}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[RO,RE]{\thepage}
+
+%目录页
+\zhnumsetup{style={Traditional,Financial}}
+\pagenumbering{zhdig}
+\tableofcontents
+\newpage
+
+%正文
+\zhnumsetup{style={Traditional,Normal}}
+\pagenumbering{zhdig}
+
+%引言
+\input{1-intro/1-intro.tex}
+
+%德篇
+\input{2-de/2-de.tex}
+
+%道篇
+\input{3-dao/3-dao.tex}
+
+\end{document}
